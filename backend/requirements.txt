@@ -1,0 +1,71 @@
+
+# ==========================================
+# LANGCHAIN & MULTI-AGENT FRAMEWORK
+# ==========================================
+langchain
+langchain-core
+langchain-community
+langchain-google-genai
+langchain-groq
+langgraph
+
+# ==========================================
+# LLM PROVIDERS
+# ==========================================
+google-generativeai
+groq
+
+# ==========================================
+# WEB SEARCH & WEB SCRAPING
+# ==========================================
+tavily-python
+beautifulsoup4
+requests
+lxml
+
+# ==========================================
+# BACKEND - FASTAPI
+# ==========================================
+fastapi
+uvicorn[standard]
+python-multipart
+
+# ==========================================
+# ENVIRONMENT & CONFIGURATION
+# ==========================================
+python-dotenv
+pydantic
+pydantic-settings
+
+# ==========================================
+# DATA PROCESSING
+# ==========================================
+pandas
+numpy
+
+# ==========================================
+# ASYNC HTTP REQUESTS
+# ==========================================
+httpx
+aiohttp
+
+# ==========================================
+# LOGGING & UTILITIES
+# ==========================================
+rich
+tqdm
+tenacity
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+langchain
+langchain-core
+langchain-groq
+groq
+reportlab
+requests
+beautifulsoup4
+trafilatura
+playwright
+streamlit
