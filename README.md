@@ -1,34 +1,102 @@
-# Research Studio — React + FastAPI
+# Research Studio — Multi-Agent AI Research Workspace
 
-A modern React/Tailwind dashboard for the existing Python multi-agent research pipeline. The Python search, scraping, source-screening, writing, critic and export modules remain the research engine. FastAPI exposes the workflow to React and streams progress events using Server-Sent Events (SSE).
+A modern React and Tailwind CSS dashboard for a Python-based multi-agent research pipeline. Research Studio searches the web, screens sources, extracts evidence, drafts a structured report, reviews report quality, and provides Markdown and PDF exports.
 
-## Project layout
+## 🚀 Live Application
+
+**[Open Research Studio](https://ai-research-agent-mu-roan.vercel.app)**
+
+## 📸 Application Screenshots
+
+### 1. Research Studio Dashboard
+![Research Studio dashboard](screenshots/dashboard.png)
+
+### 2. Research Workspace and Agent Activity
+![Research workspace and agent activity](screenshots/research-workspace.png)
+
+### 3. Generated Research Report
+![Generated research report](screenshots/research-report.png)
+
+### 4. Analysis and Discussion
+![Analysis and discussion](screenshots/analysis-and-discussion.png)
+
+### 5. Research Limitations and Completion Status
+![Research limitations and completion status](screenshots/research-limitations.png)
+
+## ✨ Features
+
+- AI-powered web research
+- Multi-agent research workflow
+- Web search and source discovery
+- Source screening and content extraction
+- Structured AI-generated research reports
+- Critic agent for report quality evaluation
+- Markdown and PDF report exports
+- Live workflow progress updates
+- React dashboard connected to a FastAPI backend
+
+## 🧰 Technology Stack
+
+**Frontend**
+- React
+- Vite
+- Tailwind CSS
+
+**Backend**
+- Python
+- FastAPI
+- LangChain
+- Groq
+- Tavily
+
+**Research and extraction**
+- BeautifulSoup
+- Trafilatura
+- Playwright (optional scraper fallback)
+
+## 📁 Project Structure
 
 ```text
-research-react-app/
+Ai-Research-Agent/
 ├── backend/
-│   ├── main.py                 # FastAPI endpoints + background jobs + SSE
-│   ├── agents.py               # Existing LangChain agents/chains
-│   ├── pipeline.py             # Existing pipeline + optional progress callback
-│   ├── tools.py                # Updated Tavily/search/scraping tools
-│   ├── research_quality.py     # Source screening
-│   ├── report_export.py       # Markdown/PDF export
+│   ├── main.py
+│   ├── agents.py
+│   ├── pipeline.py
+│   ├── tools.py
+│   ├── research_quality.py
+│   ├── report_export.py
 │   ├── requirements.txt
 │   └── .env.example
-└── frontend/
-    ├── src/
-    ├── package.json
-    └── .env.example
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── .env.example
+├── screenshots/
+│   ├── dashboard.png
+│   ├── research-workspace.png
+│   ├── research-report.png
+│   ├── analysis-and-discussion.png
+│   └── research-limitations.png
+├── .gitignore
+└── README.md
 ```
 
-## 1. Configure the backend
+## ⚙️ Run Locally
 
-Use Python 3.10+ (Python 3.11 is a good default).
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/SAYANBAG018/Ai-Research-Agent.git
+cd Ai-Research-Agent
+```
+
+### 2. Configure the backend
+
+Use Python 3.10 or newer. From the backend directory:
 
 **Windows PowerShell**
-
 ```powershell
-cd research-react-app\backend
+cd backend
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
@@ -36,12 +104,9 @@ pip install -r requirements.txt
 Copy-Item .env.example .env
 ```
 
-Open `backend/.env` and add valid `GROQ_API_KEY` and `TAVILY_API_KEY` values. The current `agents.py` explicitly requires the Groq key; web search requires the Tavily key.
-
 **macOS / Linux**
-
 ```bash
-cd research-react-app/backend
+cd backend
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
@@ -49,75 +114,62 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-If you want the Playwright scraper fallback, install its browser once after installing requirements:
+Add your own `GROQ_API_KEY` and `TAVILY_API_KEY` values to `backend/.env`. Never commit this file or expose API keys publicly.
+
+If you want to use the optional Playwright scraper fallback, install Chromium:
 
 ```bash
 python -m playwright install chromium
 ```
 
-Playwright is an optional fallback in `tools.py`; the other extraction paths can still be used without its browser installed.
+### 3. Start the backend
 
-## 2. Start the FastAPI backend
-
-Run this from the `backend` directory so the existing pipeline modules and generated report directory resolve consistently:
+Run from the `backend` directory:
 
 ```bash
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Check `http://localhost:8000/api/health` and open the interactive API docs at `http://localhost:8000/docs`.
+### 4. Configure and start the frontend
 
-## 3. Start the React frontend
-
-In a second terminal:
+Open a second terminal:
 
 ```bash
-cd research-react-app/frontend
+cd frontend
 npm install
 ```
 
-Copy the frontend environment file:
-
-```powershell
-# Windows PowerShell
-Copy-Item .env.example .env
-```
-
-```bash
-# macOS / Linux
-cp .env.example .env
-```
-
-Then run:
+Copy `frontend/.env.example` to `frontend/.env` and configure `VITE_API_URL` for your local backend if needed. Then run:
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:5173`.
+Open the local Vite URL shown in your terminal (normally `http://localhost:5173`).
 
-## API overview
+## 🔌 API Overview
 
-- `GET /api/health` — backend health check.
-- `POST /api/research` — accepts `{ "topic": "..." }` and returns a `job_id`.
-- `GET /api/jobs/{job_id}` — returns job status and completed report metadata.
-- `GET /api/jobs/{job_id}/events` — SSE stream of pipeline stage updates.
-- `GET /api/jobs/{job_id}/download/markdown` — downloads the Markdown export.
-- `GET /api/jobs/{job_id}/download/pdf` — downloads the PDF export.
+- `GET /api/health` — backend health check
+- `POST /api/research` — starts a research job
+- `GET /api/jobs/{job_id}` — retrieves job status and report metadata
+- `GET /api/jobs/{job_id}/events` — streams workflow progress using Server-Sent Events (SSE)
+- `GET /api/jobs/{job_id}/download/markdown` — downloads the Markdown report
+- `GET /api/jobs/{job_id}/download/pdf` — downloads the PDF report
 
-## Important notes
+## 🛡️ Security and Deployment Notes
 
-- The API stores job state in process memory. Restarting the backend clears job history; use a database/Redis queue if you later deploy multiple workers or need durable jobs.
-- This starter allows one in-process background thread per research request. Add authentication, rate limits and a durable task queue before exposing it publicly.
-- The SSE stream reports pipeline-stage progress. The underlying current scraper runs its selected URLs concurrently, but does not emit a separate event for each URL.
-- Source-domain screening and successful extraction are not factual verification. Review report citations and evidence before relying on findings.
-- Do not commit `.env` or publish API keys.
+- Keep `.env` files and API keys out of GitHub. Use the hosting providers' environment-variable settings for deployed secrets and configuration.
+- Set the frontend `VITE_API_URL` to the deployed backend origin in the frontend hosting environment.
+- Configure backend CORS to allow the deployed frontend origin.
+- The current backend keeps job state in process memory; restarting the service clears job history.
+- Add authentication, rate limiting, and durable background-job storage before using the application for sensitive or high-volume workloads.
+- Source screening and successful extraction are not proof that a claim is true. Review source evidence and citations before relying on a generated report.
 
-## Build the frontend for production
+## 🏗️ Build the Frontend
 
 ```bash
 cd frontend
 npm run build
 ```
 
-The production bundle is created in `frontend/dist`. Deploy it to a static host and set `VITE_API_URL` to the deployed FastAPI origin. Update backend `CORS_ORIGINS` to include the exact frontend origin.
+The production build is generated in `frontend/dist`.
